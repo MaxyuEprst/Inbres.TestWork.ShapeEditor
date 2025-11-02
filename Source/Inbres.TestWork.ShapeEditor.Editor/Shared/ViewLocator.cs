@@ -1,9 +1,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Inbres.TestWork.ShapeEditor.Editor.ViewModels;
+using Inbres.TestWork.ShapeEditor.Editor.Widgets.ShapesEditor;
 
-namespace Inbres.TestWork.ShapeEditor.Editor;
+namespace Inbres.TestWork.ShapeEditor.Editor.Shared;
 
 public class ViewLocator : IDataTemplate
 {
