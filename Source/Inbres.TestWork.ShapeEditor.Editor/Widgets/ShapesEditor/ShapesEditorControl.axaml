@@ -8,6 +8,5 @@
     <Grid>
         <Canvas x:Name="DrawingCanvas" Background="green"/>
         <Button Content="Add figure" VerticalAlignment="Top" Background="white" Width="70"/>
-        <TextBlock Margin="0 10" x:Name="message">Ready...</TextBlock>
     </Grid>
 </UserControl>

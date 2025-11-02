@@ -9,10 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <AvaloniaResource Include="Assets\**" />
-    <Folder Include="Entities\" />
-    <Folder Include="Features\" />
+    <Folder Include="Features\Serialization\" />
+    <Folder Include="Features\ShapeEditing\" />
+    <Folder Include="Features\ShapeCreation\" />
   </ItemGroup>
 
   <ItemGroup>
