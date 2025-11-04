@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
+using CommunityToolkit.Mvvm.Input;
 using Editor.Entities.Shapes;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,13 +16,8 @@ namespace Editor.ViewModels
         {
             Shapes = new ObservableCollection<EditorShape>(new List<EditorShape>
             {
-                new OvalShape
-                {
-                    X = 10,
-                    Y = 10,
-                    Width = 10,
-                    Height = 10
-                },
+                new OvalShape { X = 50, Y = 100, Width = 40, Height = 40 },
+                new OvalShape { X = 150, Y = 200, Width = 60, Height = 30 }
             });
         }
 
@@ -29,8 +26,20 @@ namespace Editor.ViewModels
         {
             var oval = new OvalShape
             {
-                X = 10,
-                Y = 10,
+                X = 100,
+                Y = 100,
+                Width = 80,
+                Height = 60
+            };
+            Shapes.Add(oval);
+        }
+
+        public void AddOvalAtPosition(double x, double y)
+        {
+            var oval = new OvalShape
+            {
+                X = x + 40,
+                Y = y + 30,
                 Width = 80,
                 Height = 60
             };

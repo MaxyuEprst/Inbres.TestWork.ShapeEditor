@@ -15,29 +15,30 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal"
                     Width="0"
-            Grid.Row="0"
             HorizontalAlignment="Left"
             Spacing="10"
             Margin="14,6">
-        <Button Content="Add Oval"
-                Width="80"
+        <Button Content="Oval"
+                Width="50"
                 Command="{Binding AddOvalCommand}" />
-        <Button Content="Add BezierCurve"
-                Width="120"/>
-        <Label Content="{Binding Shapes.Count}"/>
+        <Button Content="BezierCurve"
+                Width="100"/>
+        <Label Content="{Binding Shapes.Count}" VerticalAlignment="Center"/>
         </StackPanel>
-
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Shapes}" >
-            <ItemsControl.ItemsPanel>
+        <Border Grid.Row="1" 
+                Background="Transparent"
+                PointerPressed="OnCanvasPointerPressed">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Shapes}">
+              <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas/>
+                  <Canvas Background="Silver" />
                 </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+              </ItemsControl.ItemsPanel>
             <ItemsControl.Styles>
-                <Style Selector="ContentPresenter">
-                    <Setter Property="Canvas.Left" Value="50" />
+                <Style Selector="ItemsControl ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="25" />
                     <Setter Property="Canvas.Top" Value="25" />
-                 </Style>
+                </Style>
             </ItemsControl.Styles>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="shapes:OvalShape">
@@ -49,5 +50,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+         </Border>
     </Grid>
 </UserControl>

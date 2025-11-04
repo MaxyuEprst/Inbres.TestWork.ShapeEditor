@@ -8,7 +8,6 @@ namespace Editor.Entities.Shapes
 {
     public abstract class EditorShape
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
         public abstract ShapeType Type { get; }
         public double X { get; set; }
         public double Y { get; set; }
