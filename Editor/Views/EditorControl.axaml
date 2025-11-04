@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shapes="using:Editor.Entities.Shapes"
+             xmlns:vm="using:Editor.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Editor.EditorControl"
+             x:DataType="vm:EditorViewModel">
+
+      <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"
+                    Width="0"
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            Spacing="10"
+            Margin="14,6">
+        <Button Content="Add Oval"
+                Width="80"
+                Command="{Binding AddOvalCommand}" />
+        <Button Content="Add BezierCurve"
+                Width="120"/>
+        <Label Content="{Binding Shapes.Count}"/>
+        </StackPanel>
+
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Shapes}" >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.Styles>
+                <Style Selector="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="50" />
+                    <Setter Property="Canvas.Top" Value="25" />
+                 </Style>
+            </ItemsControl.Styles>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="shapes:OvalShape">
+                    <Ellipse Width="{Binding Width}" Height="{Binding Height}" Stroke="Black">
+                        <Ellipse.Fill>
+                            <SolidColorBrush Color="black" />
+                        </Ellipse.Fill>
+                    </Ellipse>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

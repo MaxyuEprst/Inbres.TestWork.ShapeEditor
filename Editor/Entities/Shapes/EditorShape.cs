@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inbres.TestWork.ShapeEditor.Editor.Entities.Shapes
+namespace Editor.Entities.Shapes
 {
     public abstract class EditorShape
     {
