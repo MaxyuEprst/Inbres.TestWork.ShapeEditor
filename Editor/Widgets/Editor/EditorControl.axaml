@@ -21,10 +21,11 @@
             Margin="14,6">
         <Button Content="Oval"
                 Width="50"
-                Command="{Binding AddOvalCommand}" />
+                Command="{Binding SetOvalModeCommand}" />
         <Button Content="BezierCurve"
                 Width="100"/>
         <Label Content="{Binding Shapes.Count}" VerticalAlignment="Center"/>
+        <Label Content="{Binding CurrentShapeType}" VerticalAlignment="Center"/>
         </StackPanel>
         <Border Grid.Row="1" 
                 Background="Transparent"

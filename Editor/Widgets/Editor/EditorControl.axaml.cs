@@ -19,5 +19,13 @@ namespace Editor
                 viewModel.CreateShapeAtPoint(position);
             }
         }
+        //private void OnCanvasPointerMoved(object? sender, PointerEventArgs e)
+        //{
+        //    if (DataContext is EditorViewModel viewModel && sender is Border border)
+        //    {
+        //        var position = e.GetPosition(border);
+        //        viewModel.UpdatePreview(position);
+        //    }
+        //}
     }
 }
