@@ -23,7 +23,5 @@
 
   <ItemGroup>
     <Folder Include="Features\Serialization\" />
-    <Folder Include="Features\ShapeCreation\" />
-    <Folder Include="Features\ShapeEditing\" />
   </ItemGroup>
 </Project>
