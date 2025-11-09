@@ -15,17 +15,30 @@ namespace Editor
         {
             if (DataContext is EditorViewModel viewModel && sender is Border border)
             {
-                var position = e.GetPosition(border);
-                viewModel.CreateShapeAtPoint(position);
+                var position = e.GetCurrentPoint(border).Position;
+
+                viewModel.StartCreatingShape(position);
+
+                e.Pointer.Capture(border);
             }
         }
-        //private void OnCanvasPointerMoved(object? sender, PointerEventArgs e)
-        //{
-        //    if (DataContext is EditorViewModel viewModel && sender is Border border)
-        //    {
-        //        var position = e.GetPosition(border);
-        //        viewModel.UpdatePreview(position);
-        //    }
-        //}
+
+        private void OnCanvasPointerMoved(object? sender, PointerEventArgs e)
+        {
+            if (DataContext is EditorViewModel viewModel && sender is Border border)
+            {
+                var currentPosition = e.GetCurrentPoint(border).Position;
+                viewModel.UpdateShapeSize(currentPosition);
+            }
+        }
+
+        private void OnCanvasPointerReleased(object? sender, PointerReleasedEventArgs e)
+        {
+            if (DataContext is EditorViewModel viewModel)
+            {
+                viewModel.FinishCreatingShape();
+                e.Pointer.Capture(null);
+            }
+        }
     }
 }

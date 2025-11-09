@@ -29,7 +29,9 @@
         </StackPanel>
         <Border Grid.Row="1" 
                 Background="Transparent"
-                PointerPressed="OnCanvasPointerPressed">
+                PointerPressed="OnCanvasPointerPressed"
+                PointerMoved="OnCanvasPointerMoved"
+                PointerReleased="OnCanvasPointerReleased">
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Shapes}">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

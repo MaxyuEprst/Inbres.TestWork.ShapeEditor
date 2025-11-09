@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Editor.Entities.Shapes;
@@ -16,6 +17,11 @@ namespace Editor.ViewModels
     public partial class EditorViewModel : ViewModelBase
     {
         private readonly ShapeEditorModel _model;
+        private Point _startPoint;
+        private EditorShape? _currentDrawingShape;
+
+        [ObservableProperty]
+        private bool _isDrawing = false;
 
         [ObservableProperty]
         private ShapeType _currentShapeType = ShapeType.Oval;
@@ -50,12 +56,53 @@ namespace Editor.ViewModels
             Shapes.Add(oval);
         }
 
-        public void CreateShapeAtPoint(Point point)
+        public void StartCreatingShape(Point position)
         {
             if (CurrentShapeType == ShapeType.None) return;
 
-            _model.CreateShape(CurrentShapeType, point);
-            SelectedShape = _model.Shapes.LastOrDefault();
+            _startPoint = position;
+            IsDrawing = true;
+
+            _currentDrawingShape = _model.CreateShape(CurrentShapeType, position, 0, 0);
+        }
+
+        public void UpdateShapeSize(Point currentPoint)
+        {
+            if (!IsDrawing || _currentDrawingShape == null) return;
+
+            var x = System.Math.Min(_startPoint.X, currentPoint.X);
+            var y = System.Math.Min(_startPoint.Y, currentPoint.Y);
+            var width = System.Math.Abs(currentPoint.X - _startPoint.X);
+            var height = System.Math.Abs(currentPoint.Y - _startPoint.Y);
+
+            // Обновляем свойства фигуры
+            _currentDrawingShape.X = x;
+            _currentDrawingShape.Y = y;
+            _currentDrawingShape.Width = width;
+            _currentDrawingShape.Height = height;
+        }
+
+        public void FinishCreatingShape()
+        {
+            if (!IsDrawing) return;
+
+            IsDrawing = false;
+
+            if (_currentDrawingShape != null)
+            {
+                // Если фигура слишком маленькая, удаляем её
+                if (_currentDrawingShape.Width < 5 || _currentDrawingShape.Height < 5)
+                {
+                    Shapes.Remove(_currentDrawingShape);
+                }
+                else
+                {
+                    // Выбираем созданную фигуру
+                    SelectedShape = _currentDrawingShape;
+                }
+
+                _currentDrawingShape = null;
+            }
         }
     }
 }
