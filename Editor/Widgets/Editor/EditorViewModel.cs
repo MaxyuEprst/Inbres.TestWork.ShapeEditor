@@ -76,9 +76,7 @@ namespace Editor.ViewModels
                         bezier.Points.Add(position); 
                     }
 
-                    _currentShape = null;
                     IsDrawing = false;
-                    _isBezierControlPhase = false;
                 }
             }
         }

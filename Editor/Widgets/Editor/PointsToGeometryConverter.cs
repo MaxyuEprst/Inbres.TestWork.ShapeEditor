@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
@@ -27,8 +28,9 @@ namespace Editor.Widgets.Editor
                 {
                     ctx.LineTo(points[1]);
                 }
-                else if (points.Count >= 3)
+                else
                 {
+                    Debug.WriteLine("qbc bze");
                     ctx.QuadraticBezierTo(points[1], points[2]);
                 }
 
