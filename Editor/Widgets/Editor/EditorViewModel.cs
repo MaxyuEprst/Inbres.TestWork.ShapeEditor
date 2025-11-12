@@ -16,6 +16,8 @@ namespace Editor.ViewModels
         private EditorShape? _currentShape;
 
         private bool _isBezierControlPhase = false;
+        private int _bezierPointsCount = 0;
+
 
         [ObservableProperty]
         private bool _isDrawing = false;
@@ -39,13 +41,19 @@ namespace Editor.ViewModels
         }
 
         public ObservableCollection<EditorShape> Shapes => _model.Shapes;
+        private void CompleteBezierDrawing()
+        {
+            IsDrawing = false;
+            _isBezierControlPhase = false;
+            _bezierPointsCount = 0;
+            _currentShape = null;
+        }
 
         public void OnPointerPressed(Point position)
         {
             if (CurrentShapeType == ShapeType.None)
                 return;
 
-            // OVAL: стандартное поведение (начать рисование)
             if (CurrentShapeType == ShapeType.Oval)
             {
                 _startPoint = position;
@@ -64,8 +72,9 @@ namespace Editor.ViewModels
                     _currentShape = bez;
 
                     bez.Points.Add(position);
-                    bez.Points.Add(position); 
+                    bez.Points.Add(position);
 
+                    _bezierPointsCount = 1;
                     IsDrawing = true;
                     _isBezierControlPhase = true;
                 }
@@ -73,14 +82,22 @@ namespace Editor.ViewModels
                 {
                     if (_currentShape is BezCurShape bezier)
                     {
-                        bezier.Points.Add(position); 
-                    }
+                        _bezierPointsCount++;
 
-                    IsDrawing = false;
+                        if (_bezierPointsCount == 2)
+                        {
+                            bezier.Points.Add(position);
+                            bezier.Points.Add(position);
+                        }
+                        else if (_bezierPointsCount == 3)
+                        {
+                            bezier.Points[2] = position;
+                            CompleteBezierDrawing();
+                        }
+                    }
                 }
             }
         }
-
         public void OnPointerMoved(Point position)
         {
             if (CurrentShapeType == ShapeType.None) return;
@@ -92,9 +109,16 @@ namespace Editor.ViewModels
             }
             else if (CurrentShapeType == ShapeType.BezierCurve)
             {
-                if (_isBezierControlPhase && _currentShape is BezCurShape bezier && bezier.Points.Count >= 2)
+                if (_isBezierControlPhase && _currentShape is BezCurShape bezier)
                 {
-                    bezier.Points[1] = position;
+                    if (_bezierPointsCount == 1 && bezier.Points.Count >= 2)
+                    {
+                        bezier.Points[1] = position;
+                    }
+                    else if (_bezierPointsCount == 2 && bezier.Points.Count >= 3)
+                    {
+                        bezier.Points[2] = position;
+                    }
                 }
             }
         }
