@@ -10,9 +10,9 @@ namespace Editor.Shared
     public interface IShapeDrawer
     {
         bool IsDrawing { get; }
-        void OnPointerPressed(Point position);
+        Editor.Entities.Shape.Models.EditorShape? OnPointerPressed(Point position);
         void OnPointerMoved(Point position);
-        void OnPointerReleased(Point position);
-        void Cancel(); 
+        Editor.Entities.Shape.Models.EditorShape? OnPointerReleased(Point position);
+        void Cancel();
     }
 }

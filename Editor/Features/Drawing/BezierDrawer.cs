@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Editor.Entities.Shape.Models;
 using Editor.Shared;
 
@@ -23,23 +18,25 @@ namespace Editor.Features.Drawing
             _model = model;
         }
 
-        public void OnPointerPressed(Point position)
+        public EditorShape? OnPointerPressed(Point position)
         {
             if (!_isBezierControlPhase)
             {
                 var bez = new BezCurShape();
-                _model.Shapes.Add(bez);
                 _currentShape = bez;
 
                 bez.Points.Add(position); 
                 bez.Points.Add(position); 
-                bez.Points.Add(position);
+                bez.Points.Add(position); 
 
                 _bezierPointsCount = 1;
                 IsDrawing = true;
                 _isBezierControlPhase = true;
+
+                return bez; 
             }
-            else if (_currentShape is BezCurShape bezier)
+
+            if (_currentShape is BezCurShape bezier)
             {
                 _bezierPointsCount++;
                 int lastIndex = bezier.Points.Count - 1;
@@ -53,12 +50,14 @@ namespace Editor.Features.Drawing
                     bezier.Points[lastIndex] = position;
 
                     var lastPoint = position;
-                    bezier.Points.Add(lastPoint); 
+                    bezier.Points.Add(lastPoint);
                     bezier.Points.Add(lastPoint);
 
                     _bezierPointsCount = 1;
                 }
             }
+
+            return null;
         }
 
         public void OnPointerMoved(Point position)
@@ -69,17 +68,14 @@ namespace Editor.Features.Drawing
             int lastIndex = bezier.Points.Count - 1;
 
             if (_bezierPointsCount == 1)
-            {
                 bezier.Points[lastIndex - 1] = position;
-            }
             else if (_bezierPointsCount == 2)
-            {
                 bezier.Points[lastIndex] = position;
-            }
         }
 
-        public void OnPointerReleased(Point position)
+        public EditorShape? OnPointerReleased(Point position)
         {
+            return null;
         }
 
         public void Cancel()

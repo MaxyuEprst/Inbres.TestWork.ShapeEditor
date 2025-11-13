@@ -22,11 +22,12 @@ namespace Editor.Features.Drawing
             _model = model;
         }
 
-        public void OnPointerPressed(Point position)
+        public EditorShape? OnPointerPressed(Point position)
         {
             _startPoint = position;
             _currentShape = _model.CreateShape(ShapeType.Oval, position, 0, 0);
             IsDrawing = true;
+            return _currentShape;
         }
 
         public void OnPointerMoved(Point position)
@@ -41,14 +42,22 @@ namespace Editor.Features.Drawing
             _currentShape.Height = Math.Abs(position.Y - _startPoint.Y);
         }
 
-        public void OnPointerReleased(Point position)
+        public EditorShape? OnPointerReleased(Point position)
         {
-            if (_currentShape == null) return;
-            if (_currentShape.Width < 2 || _currentShape.Height < 2)
-                _model.RemoveShape(_currentShape);
+            if (_currentShape == null) return null;
 
+            if (_currentShape.Width < 2 || _currentShape.Height < 2)
+            {
+                _model.RemoveShape(_currentShape);
+                _currentShape = null;
+                IsDrawing = false;
+                return null;
+            }
+
+            var finished = _currentShape;
             _currentShape = null;
             IsDrawing = false;
+            return finished;
         }
 
         public void Cancel()

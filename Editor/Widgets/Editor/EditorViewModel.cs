@@ -25,11 +25,8 @@ namespace Editor.ViewModels
             get => _currentShapeType;
             set
             {
-                if (_currentShapeType == value)
-                    return;
-
+                if (_currentShapeType == value) return;
                 _currentShapeType = value;
-                OnPropertyChanged();
                 CancelCurrentDrawing();
                 SetDrawerForShape(value);
             }
@@ -42,16 +39,10 @@ namespace Editor.ViewModels
         }
 
         [RelayCommand]
-        private void ChangeMod(ShapeType shapeType)
-        {
-            CurrentShapeType = shapeType;
-        }
+        private void ChangeMod(ShapeType shapeType) => CurrentShapeType = shapeType;
 
         [RelayCommand]
-        private void ClearAll()
-        {
-            _model.ClearShapes();
-        }
+        private void ClearAll() => _model.ClearShapes();
 
         private void SetDrawerForShape(ShapeType type)
         {
@@ -66,15 +57,32 @@ namespace Editor.ViewModels
         public void OnPointerPressed(Point position, PointerUpdateKind updateKind)
         {
             if (updateKind == PointerUpdateKind.RightButtonPressed)
+            {
                 _currentDrawer?.Cancel();
-            else
-                _currentDrawer?.OnPointerPressed(position);
+                return;
+            }
+
+            var shape = _currentDrawer?.OnPointerPressed(position);
+            if (shape != null && !_model.Shapes.Contains(shape))
+                _model.Shapes.Add(shape);
         }
 
-        public void OnPointerMoved(Point position) => _currentDrawer?.OnPointerMoved(position);
+        public void OnPointerMoved(Point position) =>
+            _currentDrawer?.OnPointerMoved(position);
 
-        public void OnPointerReleased(Point position) => _currentDrawer?.OnPointerReleased(position);
+        public void OnPointerReleased(Point position)
+        {
+            var shape = _currentDrawer?.OnPointerReleased(position);
+            if (shape != null && !_model.Shapes.Contains(shape))
+                _model.Shapes.Add(shape);
+        }
 
         private void CancelCurrentDrawing() => _currentDrawer?.Cancel();
+
+        public void OnKeyPressed(Key key)
+        {
+            if (key == Key.Escape)
+                _currentDrawer?.Cancel();
+        }
     }
 }
