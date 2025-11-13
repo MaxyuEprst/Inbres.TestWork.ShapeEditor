@@ -10,13 +10,20 @@ namespace Editor
         {
             InitializeComponent();
             DataContext = new EditorViewModel();
+
+            this.Focusable = true;
+            this.Focus();
         }
+
         private void OnCanvasPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             if (DataContext is EditorViewModel vm && sender is Border border)
             {
-                var position = e.GetCurrentPoint(border).Position;
-                vm.OnPointerPressed(position);
+                var point = e.GetCurrentPoint(border);
+                var position = point.Position;
+                var updateKind = point.Properties.PointerUpdateKind;
+
+                vm.OnPointerPressed(position, updateKind);
                 e.Pointer.Capture(border);
             }
         }
@@ -45,7 +52,12 @@ namespace Editor
             base.OnKeyDown(e);
 
             if (DataContext is EditorViewModel vm)
-                vm.OnKeyPressed(e.Key);
+            {
+                if (e.Key == Key.Escape)
+                {
+                    vm.OnPointerPressed(default, PointerUpdateKind.RightButtonPressed);
+                }
+            }
         }
     }
 }
