@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="using:Editor.Widgets.Editor"
@@ -30,8 +30,14 @@
     <Button Content="Bezier Curve" 
             Command="{Binding ChangeModCommand}"
             CommandParameter="{x:Static shared:ShapeType.BezierCurve}" />
-    <Button Content="Select"
+    <Button Content="↖"
             Command="{Binding ChangeModCommand}"
+            CommandParameter="{x:Static shared:ShapeType.None}" />
+    <Button Content="Clear All"
+            Command="{Binding ClearAllCommand}"
+            CommandParameter="{x:Static shared:ShapeType.None}" />    
+    <Button Content="💾"
+            Command="{Binding ClearAllCommand}"
             CommandParameter="{x:Static shared:ShapeType.None}" />
         <Label Content="{Binding Shapes.Count}" VerticalAlignment="Center"/>
         <Label Content="{Binding CurrentShapeType}" VerticalAlignment="Center"/>

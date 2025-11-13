@@ -28,6 +28,12 @@ namespace Editor.ViewModels
         [ObservableProperty]
         private EditorShape? _selectedShape;
 
+        public EditorViewModel()
+        {
+            _model = new ShapeEditorModel();
+        }
+        public ObservableCollection<EditorShape> Shapes => _model.Shapes;
+
         [RelayCommand]
         private void ChangeMod(ShapeType shapeType)
         {
@@ -35,12 +41,13 @@ namespace Editor.ViewModels
             CancelCurrentDrawing();
         }
 
-        public EditorViewModel()
+        [RelayCommand]
+        private void ClearAll()
         {
-            _model = new ShapeEditorModel();
+            _model.ClearShapes();
         }
 
-        public ObservableCollection<EditorShape> Shapes => _model.Shapes;
+
         private void CompleteBezierDrawing()
         {
             if (_currentShape is BezCurShape bezier && _bezierPointsCount == 1)
