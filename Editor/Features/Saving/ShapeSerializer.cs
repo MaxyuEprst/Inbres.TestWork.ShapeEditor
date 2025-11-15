@@ -1,37 +1,36 @@
 ﻿using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Entities.Shape.DTOs;
 using Editor.Entities.Shape.Models;
+using Editor.Entities.Shape.DTOs;
+using Editor.Features.Saving.JsonContexts;
 
 namespace Editor.Features.Saving
 {
     public class ShapeSerializer
     {
-        private readonly JsonSerializerOptions _options;
-
-        public ShapeSerializer()
-        {
-            _options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                Converters = { new PointJsonConverter() }
-            };
-        }
-
         public string Serialize(IEnumerable<EditorShape> shapes)
         {
             var shapeDtos = shapes.Select(shape => shape.ToDto()).ToList();
-            return JsonSerializer.Serialize(shapeDtos, _options);
+
+            return JsonSerializer.Serialize(shapeDtos, ShapeJsonContext.Default.ListShapeDto);
         }
 
         public List<EditorShape> Deserialize(string json)
         {
-            var shapeDtos = JsonSerializer.Deserialize<List<ShapeDto>>(json, _options)
-                ?? new List<ShapeDto>();
+            var shapeDtos = JsonSerializer.Deserialize(json, ShapeJsonContext.Default.ListShapeDto);
 
-            return shapeDtos.Select(dto => dto.ToShape()).Where(shape => shape != null).ToList()!;
+            if (shapeDtos == null)
+                return new List<EditorShape>();
+
+            var result = new List<EditorShape>();
+            foreach (var dto in shapeDtos)
+            {
+                var shape = dto.ToShape();
+                if (shape != null)
+                    result.Add(shape);
+            }
+            return result;
         }
     }
 }
