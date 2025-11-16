@@ -2,8 +2,13 @@ name: Build AOT Releases
 
 on:
   push:
+<<<<<<< HEAD
     tags: ['v*']
   workflow_dispatch:
+=======
+    tags: ['v*']  
+  workflow_dispatch: 
+>>>>>>> Create main.yml
 
 jobs:
   build-windows:
@@ -27,6 +32,10 @@ jobs:
       with:
         name: ShapeEditor-windows-x64
         path: publish/win-x64/
+<<<<<<< HEAD
+=======
+        retention-days: 30
+>>>>>>> Create main.yml
 
   build-linux:
     runs-on: ubuntu-latest
@@ -39,6 +48,7 @@ jobs:
       with:
         dotnet-version: 9.0.x
         
+<<<<<<< HEAD
     - name: Install dependencies
       run: |
         sudo apt-get update
@@ -48,16 +58,37 @@ jobs:
       run: |
         cd Source/App
         dotnet publish -p:PublishAot=true -r linux-x64 -c Release --self-contained -o ../../publish/linux-x64
+=======
+    - name: Install dependencies (Ubuntu)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libx11-dev libice-dev libsm-dev libfontconfig-dev
+        
+    - name: Build Linux ARM64
+      run: |
+        cd Source/App
+        dotnet publish -p:PublishAot=true -r linux-arm64 -c Release --self-contained -o ../../publish/linux-arm64
+>>>>>>> Create main.yml
         
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4
       with:
+<<<<<<< HEAD
         name: ShapeEditor-linux-x64
         path: publish/linux-x64/
+=======
+        name: ShapeEditor-linux-arm64
+        path: publish/linux-arm64/
+        retention-days: 30
+>>>>>>> Create main.yml
 
   create-release:
     needs: [build-windows, build-linux]
     runs-on: ubuntu-latest
+<<<<<<< HEAD
+=======
+    if: startsWith(github.ref, 'refs/tags/')
+>>>>>>> Create main.yml
     
     steps:
     - name: Download Windows Artifact
@@ -69,19 +100,29 @@ jobs:
     - name: Download Linux Artifact
       uses: actions/download-artifact@v4
       with:
+<<<<<<< HEAD
         name: ShapeEditor-linux-x64
         path: dist/linux-x64
+=======
+        name: ShapeEditor-linux-arm64
+        path: dist/linux-arm64
+>>>>>>> Create main.yml
         
     - name: Create ZIP archives
       run: |
         cd dist/win-x64 && zip -r ../../ShapeEditor-win-x64.zip ./*
+<<<<<<< HEAD
         cd ../linux-x64 && zip -r ../../ShapeEditor-linux-x64.zip ./*
+=======
+        cd ../linux-arm64 && zip -r ../../ShapeEditor-linux-arm64.zip ./*
+>>>>>>> Create main.yml
         
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           ShapeEditor-win-x64.zip
+<<<<<<< HEAD
           ShapeEditor-linux-x64.zip
         tag_name: ${{ github.ref_name }} 
         name: Shape Editor 1.0
@@ -90,3 +131,7 @@ jobs:
           
         draft: false
         prerelease: false 
+=======
+          ShapeEditor-linux-arm64.zip
+        generate_release_notes: true
+>>>>>>> Create main.yml
