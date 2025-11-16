@@ -2,8 +2,8 @@ name: Build AOT Releases
 
 on:
   push:
-    tags: ['v*']  
-  workflow_dispatch: 
+    tags: ['v*']
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -27,7 +27,6 @@ jobs:
       with:
         name: ShapeEditor-windows-x64
         path: publish/win-x64/
-        retention-days: 30
 
   build-linux:
     runs-on: ubuntu-latest
@@ -40,22 +39,21 @@ jobs:
       with:
         dotnet-version: 9.0.x
         
-    - name: Install dependencies (Ubuntu)
+    - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libx11-dev libice-dev libsm-dev libfontconfig-dev
+        sudo apt-get install -y libx11-dev libice-dev libsm-dev libfontconfig1-dev libfreetype6-dev
         
-    - name: Build Linux ARM64
+    - name: Build Linux x64  # ← ИЗМЕНИЛИ на x64!
       run: |
         cd Source/App
-        dotnet publish -p:PublishAot=true -r linux-arm64 -c Release --self-contained -o ../../publish/linux-arm64
+        dotnet publish -p:PublishAot=true -r linux-x64 -c Release --self-contained -o ../../publish/linux-x64
         
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ShapeEditor-linux-arm64
-        path: publish/linux-arm64/
-        retention-days: 30
+        name: ShapeEditor-linux-x64
+        path: publish/linux-x64/
 
   create-release:
     needs: [build-windows, build-linux]
@@ -72,18 +70,18 @@ jobs:
     - name: Download Linux Artifact
       uses: actions/download-artifact@v4
       with:
-        name: ShapeEditor-linux-arm64
-        path: dist/linux-arm64
+        name: ShapeEditor-linux-x64
+        path: dist/linux-x64
         
     - name: Create ZIP archives
       run: |
         cd dist/win-x64 && zip -r ../../ShapeEditor-win-x64.zip ./*
-        cd ../linux-arm64 && zip -r ../../ShapeEditor-linux-arm64.zip ./*
+        cd ../linux-x64 && zip -r ../../ShapeEditor-linux-x64.zip ./*
         
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           ShapeEditor-win-x64.zip
-          ShapeEditor-linux-arm64.zip
+          ShapeEditor-linux-x64.zip
         generate_release_notes: true
