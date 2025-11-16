@@ -58,7 +58,7 @@ jobs:
   create-release:
     needs: [build-windows, build-linux]
     runs-on: ubuntu-latest
-    # УБРАЛИ условие if - релиз создается всегда при успешной сборке
+    
     steps:
     - name: Download Windows Artifact
       uses: actions/download-artifact@v4
@@ -83,11 +83,14 @@ jobs:
         files: |
           ShapeEditor-win-x64.zip
           ShapeEditor-linux-x64.zip
-        tag_name: test-build-${{ github.run_id }}  # Уникальный тег для тестовых сборок
-        name: "Test Build #${{ github.run_id }}"
+        tag_name: ${{ github.ref_name }}  # Используем имя тега (v1.0.0)
+        name: Shape Editor ${{ github.ref_name }}
         body: |
-          Automated test build from GitHub Actions
+          ## Shape Editor - Native AOT Compiled
           
-          **This is a test build!** For official releases, use version tags (v1.0.0, v2.0.0, etc.)
+          ### 📦 Downloads:
+          - **Windows x64**: `ShapeEditor-win-x64.zip`
+          - **Linux x64**: `ShapeEditor-linux-x64.zip`
+
         draft: false
-        prerelease: true
+        prerelease: false
