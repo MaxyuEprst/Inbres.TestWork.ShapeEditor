@@ -12,6 +12,7 @@ public class PointConverter : JsonConverter<Point>
             throw new JsonException("Expected start of object for Point.");
 
         double x = 0, y = 0;
+
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
