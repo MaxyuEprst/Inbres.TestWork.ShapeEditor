@@ -1,10 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Editor.Entities.Shape.DTOs;
+﻿using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Editor.Features.Saving;
 using Editor.Shared;
 
 namespace Editor.Entities.Shape.Models
 {
-    public abstract partial class EditorShape : ObservableObject, IShapeSerializable
+    [JsonDerivedType(typeof(OvalShape), typeDiscriminator: "oval")]
+    [JsonDerivedType(typeof(BezCurShape), typeDiscriminator: "bezier")]
+    public abstract partial class EditorShape : ObservableObject
     {
         public abstract ShapeType Type { get; }
 
@@ -20,9 +23,5 @@ namespace Editor.Entities.Shape.Models
         [ObservableProperty]
         private double _height;
 
-        [System.Text.Json.Serialization.JsonIgnore]
-        public virtual bool IsPreview { get; set; }
-
-        public abstract ShapeDto ToDto();
     }
 }
