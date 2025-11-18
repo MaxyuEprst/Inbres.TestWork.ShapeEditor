@@ -22,6 +22,5 @@ namespace Editor.Entities.Shape.Models
 
         [ObservableProperty]
         private double _height;
-
     }
 }
