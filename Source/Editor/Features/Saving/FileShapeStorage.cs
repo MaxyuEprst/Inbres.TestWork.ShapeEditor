@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Editor.Entities.Shape.Models;
 
@@ -52,13 +50,11 @@ namespace Editor.Features.Saving
         }
 
         private string GetFilePath(string fileName)
-        {
-            return Path.Combine(
+            => Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "ShapeEditor",
                 fileName
             );
-        }
 
         private void EnsureDirectoryExists()
         {
