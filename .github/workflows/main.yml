@@ -1,0 +1,96 @@
+name: Build AOT Releases
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Build Windows x64
+      run: |
+        cd Source/App
+        dotnet publish -p:PublishAot=true -r win-x64 -c Release --self-contained -o ../../publish/win-x64
+        
+    - name: Upload Windows Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ShapeEditor-windows-x64
+        path: publish/win-x64/
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libx11-dev libice-dev libsm-dev libfontconfig1-dev libfreetype6-dev
+        
+    - name: Build Linux x64
+      run: |
+        cd Source/App
+        dotnet publish -p:PublishAot=true -r linux-x64 -c Release --self-contained -o ../../publish/linux-x64
+        
+    - name: Upload Linux Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ShapeEditor-linux-x64
+        path: publish/linux-x64/
+
+  create-release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download Windows Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ShapeEditor-windows-x64
+        path: dist/win-x64
+        
+    - name: Download Linux Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ShapeEditor-linux-x64
+        path: dist/linux-x64
+        
+    - name: Create ZIP archives
+      run: |
+        cd dist/win-x64 && zip -r ../../ShapeEditor-win-x64.zip ./*
+        cd ../linux-x64 && zip -r ../../ShapeEditor-linux-x64.zip ./*
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ShapeEditor-win-x64.zip
+          ShapeEditor-linux-x64.zip
+        tag_name: ${{ github.ref_name }}  # Используем имя тега (v1.0.0)
+        name: Shape Editor ${{ github.ref_name }}
+        body: |
+          ## Shape Editor - Native AOT Compiled
+          
+          ### 📦 Downloads:
+          - **Windows x64**: `ShapeEditor-win-x64.zip`
+          - **Linux x64**: `ShapeEditor-linux-x64.zip`
+
+        draft: false
+        prerelease: false
