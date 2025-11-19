@@ -1,5 +1,4 @@
-﻿
-using Editor.Shared;
+﻿using Editor.Shared;
 
 namespace Editor.Entities.Shape.Models
 {
