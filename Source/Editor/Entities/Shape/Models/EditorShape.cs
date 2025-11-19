@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Editor.Features.Saving;
 using Editor.Shared;
 
 namespace Editor.Entities.Shape.Models
