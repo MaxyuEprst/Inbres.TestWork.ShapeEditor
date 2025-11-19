@@ -1,8 +1,6 @@
 ﻿using System.Text.Json;
 using System.Collections.Generic;
 using Editor.Entities.Shape.Models;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 
 namespace Editor.Features.Saving
 {

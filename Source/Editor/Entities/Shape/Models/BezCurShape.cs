@@ -1,9 +1,7 @@
 ﻿using Avalonia;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Editor.Shared;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Editor.Entities.Shape.Models
 {
